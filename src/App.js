@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useId } from "react"
 
 import LineChart from "./LineChart"
+import PieChart from "./PieChart"
 
-function LocationForm({ location, setLocation, handleSubmit }) {
+function LocationForm({ location, setLocation, handleSubmit, email, setEmail }) {
   return (
     <div className="container">
       <h2>Let's make an impact! Save the capybaras now!</h2>
@@ -14,20 +15,24 @@ function LocationForm({ location, setLocation, handleSubmit }) {
           value={location}
           onChange={(e) => setLocation(e.target.value)}
         />
-        <label for="email">And email address if you want a reminder of time to push code</label>
-        <input type="email" id="email" pattern=".+@example\.com" size="30" />
+        <label htmlFor="email">And email address if you want a reminder of time to push code</label>
+        <input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} />
         <button type="submit">Get Carbon Intensity</button>
       </form>
     </div>
   )
 }
+
 function Stat({ stat }) {
+  const generationmix = stat.data[0].generationmix
+
   return (
     <div className="container">
       <h2>
         Current Carbon Intensity in {stat.shortname} is {stat.data[0].intensity.index}. Push your
         code!
       </h2>
+      <PieChart data={generationmix} />
       <h2>24hrs forecast of Carbon Intensity in {stat.shortname}</h2>
       <LineChart data={stat.data} />
 
@@ -42,16 +47,54 @@ function Stat({ stat }) {
 
 export default function App() {
   const [location, setLocation] = useState("")
+  const [email, setEmail] = useState("")
   const [stat, setStat] = useState(null)
+  const userId = useId()
 
   function handleSubmit(e) {
     e.preventDefault()
 
     if (!location) return
+    if (email) {
+      const regex =
+        /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/
+      if (regex.test(email)) {
+        const user = {
+          id: userId,
+          location,
+          email,
+        }
+        console.log("sending to backend", user)
+      }
+      alert("Invalid email")
+
+      // postUserData(user)
+    }
     setLocation(location)
     getIntensity(location)
   }
 
+  // Send user data to backend if there's email
+  async function postUserData(data) {
+    try {
+      const response = await fetch("/user", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+
+      if (response.ok) {
+        const result = await response.json()
+        console.log("Success:", result)
+      } else {
+        console.error("Error:", response.statusText)
+      }
+    } catch (error) {
+      console.error("Error:", error)
+    }
+  }
   // Get carbon intensity by location
   async function getIntensity(location) {
     const now = new Date().toISOString()
@@ -70,7 +113,13 @@ export default function App() {
   return (
     <div className="App">
       <img src="/capylogo.svg" alt="capybara logo" id="logo" />
-      <LocationForm location={location} setLocation={setLocation} handleSubmit={handleSubmit} />
+      <LocationForm
+        location={location}
+        setLocation={setLocation}
+        handleSubmit={handleSubmit}
+        email={email}
+        setEmail={setEmail}
+      />
       {stat && <Stat location={location} stat={stat} />}
     </div>
   )
