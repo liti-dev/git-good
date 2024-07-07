@@ -6,7 +6,8 @@ import PieChart from "./PieChart"
 function LocationForm({ location, setLocation, handleSubmit, email, setEmail }) {
   return (
     <div className="container">
-      <h2>Let's make an impact! Save the capybaras now!</h2>
+      <h2>💡Coding-related activities consume electricity.</h2>
+      <h2>Save the capybaras by choosing the ideal time to push your code!</h2>
       <form onSubmit={handleSubmit}>
         <label for="postcode">Enter your regional postcode (i.e. RG41 or SW1)</label>
         <input
@@ -65,10 +66,9 @@ export default function App() {
           email,
         }
         console.log("sending to backend", user)
+        postUserData(user)
       }
       alert("Invalid email")
-
-      // postUserData(user)
     }
     setLocation(location)
     getIntensity(location)
