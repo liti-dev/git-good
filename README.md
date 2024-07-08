@@ -3,12 +3,18 @@
 
 
 
-# Git Good
+# Git Good - HuddleHive's Hackathon 2024
+## Team Roles
+I was in charge of the frontend.  
+Karnati was in charge of developing the backend notification system.  
+Farah was in charge of product development and UX UI design.  
 ## Demo
-Try it [here](https://git-good-pi.vercel.app/) 
+Try it [here](https://git-good-pi.vercel.app/)   
+[Figma prototype](https://www.figma.com/proto/eMW4IArqV4er0bp0FDmjDC/GitGood?node-id=2710-4118&t=opFdOIhAN7oJoJqz-1&scaling=min-zoom&content-scaling=fixed&page-id=2703%3A2&starting-point-node-id=2710%3A4118)
 ## Overview
+
 As tech newbies, how can we be empowered to make greener choices? Let’s start with a git push!  
-Utilizing National Grid's Carbon Intensity API, we make an app to inform you when is the best time to push to Github
+Utilizing National Grid's Carbon Intensity API, we make an app to inform you when is the best time to push your code to Github (or to do other energy-consuming activities)
 
 ## Tech Stack
 React, Chart.js
