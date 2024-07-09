@@ -24,8 +24,9 @@ export default function App() {
         }
         console.log("sending to backend", user)
         postUserData(user)
+      } else {
+        alert("Invalid email")
       }
-      alert("Invalid email")
     }
     setLocation(location)
     getIntensity(location)
@@ -34,7 +35,7 @@ export default function App() {
   // Send user data to backend if there's email
   async function postUserData(data) {
     try {
-      const response = await fetch("/user", {
+      const response = await fetch("http://localhost:8080/user", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
