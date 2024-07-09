@@ -20,6 +20,9 @@ const transporter = nodemailer.createTransport({
     pass: process.env.EMAIL_PASS,
   },
 })
+app.get("/", (req, res) => {
+  res.send("Hello World!")
+})
 
 // POST endpoint to handle user data and send reminder email
 app.post("/user", async (req, res) => {
@@ -35,14 +38,15 @@ app.post("/user", async (req, res) => {
     subject: "Subject",
     text: "It's time to push your code (or to do other energy-consuming activities). Thanks for saving the Capybaras by reducing carbon impact of your code!",
   }
+  console.log(message)
 
   // Send the email
-  try {
-    await transporter.sendMail(message)
-    res.status(200).send("Reminder email sent")
-  } catch (error) {
-    res.status(500).send("Error sending email")
-  }
+  // try {
+  //   await transporter.sendMail(message)
+  //   res.status(200).send("Reminder email sent")
+  // } catch (error) {
+  //   res.status(500).send("Error sending email")
+  // }
 })
 
 app.listen(port, () => {
