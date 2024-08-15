@@ -113,7 +113,7 @@ function Stat({ stat }) {
         Current Carbon Intensity in {stat.shortname} is {stat.data[0].intensity.index}.
       </h2>
       <h2>
-        {stat.data[0].intensity.index === ("low" || "very low")
+        {stat.data[0].intensity.index === "low" || "very low"
           ? " Push your code!"
           : " Now it's not the best time. Come back later or we'll send you a notification."}
       </h2>
