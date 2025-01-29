@@ -1,5 +1,6 @@
-import { useEffect, useState, useId } from "react"
+//
 
+import { useEffect, useState, useId } from "react"
 import LineChart from "./LineChart"
 import PieChart from "./PieChart"
 
@@ -32,8 +33,9 @@ export default function App() {
     getIntensity(location)
   }
 
-  // Send user data to backend if there's email
+  // ✅ **1️⃣ Send user data to backend if there's email**
   async function postUserData(data) {
+    console.log("Preparing to send request", data)
     try {
       const response = await fetch("http://localhost:8080/user", {
         method: "POST",
@@ -43,20 +45,21 @@ export default function App() {
         body: JSON.stringify(data),
       })
 
+      console.log("Response received", response)
       if (response.ok) {
         const result = await response.json()
-        console.log("Success:", result)
+        console.log("Subscribed successfully:", result)
       } else {
-        console.error("Error:", response.statusText)
+        console.error("Error response from server:", response.status, response.statusText)
       }
     } catch (error) {
-      console.error("Error:", error)
+      console.error("Network error:", error)
     }
   }
-  // Get carbon intensity by location
+
+  // ✅ **2️⃣ Get carbon intensity by location**
   async function getIntensity(location) {
     const now = new Date().toISOString()
-    // console.log(now);
     try {
       const res = await fetch(
         `https://api.carbonintensity.org.uk/regional/intensity/${now}/fw24h/postcode/${location}`
@@ -89,14 +92,14 @@ function LocationForm({ location, setLocation, handleSubmit, email, setEmail }) 
       <h2>💡Coding-related activities consume electricity.</h2>
       <h2>Save the capybaras by choosing the ideal time to push your code!</h2>
       <form onSubmit={handleSubmit}>
-        <label for="postcode">Enter your regional postcode (i.e. RG41 or SW1)</label>
+        <label htmlFor="postcode">Enter your regional postcode (e.g., RG41 or SW1)</label>
         <input
           type="text"
           id="postcode"
           value={location}
           onChange={(e) => setLocation(e.target.value)}
         />
-        <label htmlFor="email">And email address if you want a reminder of time to push code</label>
+        <label htmlFor="email">And email if you want a reminder</label>
         <input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} />
         <button type="submit">Get Carbon Intensity</button>
       </form>
@@ -115,17 +118,11 @@ function Stat({ stat }) {
       <h2>
         {stat.data[0].intensity.index === "low" || "very low"
           ? " Push your code!"
-          : " Now it's not the best time. Come back later or we'll send you a notification."}
+          : " Now is not the best time. We'll send you a notification."}
       </h2>
       <PieChart data={generationmix} />
       <h2>24hrs forecast of Carbon Intensity in {stat.shortname}</h2>
       <LineChart data={stat.data} />
-
-      {/* {stat.data.map((d) => (
-        <p>
-          {d.intensity.forecast} {d.intensity.index}
-        </p>
-      ))} */}
     </div>
   )
 }
