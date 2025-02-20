@@ -17,5 +17,6 @@
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "nodemailer": "^6.10.0"
-  }
+  },
+  "proxy": "https://api.websitecarbon.com"
 }

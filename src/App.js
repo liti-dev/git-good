@@ -1,6 +1,7 @@
 //
 
 import { useEffect, useState, useId } from "react"
+import { WebsiteCarbonBadge } from "react-websitecarbon-badge"
 import LineChart from "./LineChart"
 import PieChart from "./PieChart"
 
@@ -33,7 +34,7 @@ export default function App() {
     getIntensity(location)
   }
 
-  // ✅ **1️⃣ Send user data to backend if there's email**
+  // Send user data to backend if there's email
   async function postUserData(data) {
     console.log("Preparing to send request", data)
     try {
@@ -57,7 +58,7 @@ export default function App() {
     }
   }
 
-  // ✅ **2️⃣ Get carbon intensity by location**
+  // Get carbon intensity by location
   async function getIntensity(location) {
     const now = new Date().toISOString()
     try {
@@ -82,6 +83,8 @@ export default function App() {
         setEmail={setEmail}
       />
       {stat && <Stat location={location} stat={stat} />}
+      {/* <WebsiteCarbonBadge co2="0.13" percentage="87" /> */}
+      <WebsiteCarbonBadge url="https://git-good-pi.vercel.app/" />
     </div>
   )
 }
