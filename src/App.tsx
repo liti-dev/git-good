@@ -1,4 +1,4 @@
-import { useState, useId } from "react"
+import React, { useState, useId } from "react"
 import { WebsiteCarbonBadge } from "react-websitecarbon-badge"
 import LineChart from "./LineChart"
 import PieChart from "./PieChart"
@@ -80,7 +80,7 @@ export default function App() {
         email={email}
         setEmail={setEmail}
       />
-      {stat && <Stat location={location} stat={stat} />}
+      {stat && <Stat stat={stat} />}
       <WebsiteCarbonBadge url="https://git-good-pi.vercel.app/" />
     </div>
   )
