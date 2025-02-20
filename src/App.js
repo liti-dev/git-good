@@ -1,6 +1,4 @@
-//
-
-import { useEffect, useState, useId } from "react"
+import { useState, useId } from "react"
 import { WebsiteCarbonBadge } from "react-websitecarbon-badge"
 import LineChart from "./LineChart"
 import PieChart from "./PieChart"
@@ -45,8 +43,8 @@ export default function App() {
         },
         body: JSON.stringify(data),
       })
-
       console.log("Response received", response)
+
       if (response.ok) {
         const result = await response.json()
         console.log("Subscribed successfully:", result)
@@ -83,7 +81,6 @@ export default function App() {
         setEmail={setEmail}
       />
       {stat && <Stat location={location} stat={stat} />}
-      {/* <WebsiteCarbonBadge co2="0.13" percentage="87" /> */}
       <WebsiteCarbonBadge url="https://git-good-pi.vercel.app/" />
     </div>
   )
