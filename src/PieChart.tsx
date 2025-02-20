@@ -2,10 +2,13 @@ import React, { useEffect, useRef } from "react"
 import { Chart } from "chart.js/auto"
 
 const PieChart = ({ data }) => {
-  const chartRef = useRef(null)
+  const chartRef = useRef<HTMLCanvasElement | null>(null)
 
   useEffect(() => {
+    if (!chartRef.current) return
     const ctx = chartRef.current.getContext("2d")
+    if (!ctx) return
+
     const labels = data.map((d) => d.fuel)
     const percentages = data.map((d) => d.perc)
     const colors = [
