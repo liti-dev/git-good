@@ -1,7 +1,14 @@
 import React, { useEffect, useRef } from "react"
 import { Chart } from "chart.js/auto"
 
-const PieChart = ({ data }) => {
+interface PieChartProps {
+  data: Array<{
+    fuel: string
+    perc: number
+  }>
+}
+
+const PieChart: React.FC<PieChartProps> = ({ data }) => {
   const chartRef = useRef<HTMLCanvasElement | null>(null)
 
   useEffect(() => {

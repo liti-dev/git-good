@@ -3,13 +3,25 @@ import { WebsiteCarbonBadge } from "react-websitecarbon-badge"
 import LineChart from "./LineChart"
 import PieChart from "./PieChart"
 
+interface LocationFormProps {
+  location: string
+  setLocation: React.Dispatch<React.SetStateAction<string>>
+  handleSubmit: (e: React.FormEvent) => void
+  email: string
+  setEmail: React.Dispatch<React.SetStateAction<string>>
+}
+
+interface StatProps {
+  stat: any // You can replace 'any' with a more specific type if you have one
+}
+
 export default function App() {
   const [location, setLocation] = useState("")
   const [email, setEmail] = useState("")
   const [stat, setStat] = useState(null)
   const userId = useId()
 
-  function handleSubmit(e) {
+  function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
 
     if (!location) return
@@ -33,7 +45,7 @@ export default function App() {
   }
 
   // Send user data to backend if there's email
-  async function postUserData(data) {
+  async function postUserData(data: { id: string; location: string; email: string }) {
     console.log("Preparing to send request", data)
     try {
       const response = await fetch("http://localhost:8080/user", {
@@ -57,7 +69,7 @@ export default function App() {
   }
 
   // Get carbon intensity by location
-  async function getIntensity(location) {
+  async function getIntensity(location: string) {
     const now = new Date().toISOString()
     try {
       const res = await fetch(
@@ -86,7 +98,7 @@ export default function App() {
   )
 }
 
-function LocationForm({ location, setLocation, handleSubmit, email, setEmail }) {
+function LocationForm({ location, setLocation, handleSubmit, email, setEmail }: LocationFormProps) {
   return (
     <div className="container">
       <h2>💡Coding-related activities consume electricity.</h2>
@@ -107,7 +119,7 @@ function LocationForm({ location, setLocation, handleSubmit, email, setEmail }) 
   )
 }
 
-function Stat({ stat }) {
+function Stat({ stat }: StatProps) {
   const generationmix = stat.data[0].generationmix
 
   return (

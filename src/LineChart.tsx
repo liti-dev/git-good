@@ -4,17 +4,28 @@ import { Chart } from "chart.js/auto"
 
 import "./index.css"
 
-const LineChart = ({ data }) => {
-  const chartRef = useRef(null)
+interface LineChartProps {
+  data: Array<{
+    intensity: {
+      forecast: number
+      index: string
+    }
+  }>
+}
+
+const LineChart: React.FC<LineChartProps> = ({ data }) => {
+  const chartRef = useRef<HTMLCanvasElement | null>(null)
 
   useEffect(() => {
+    if (!chartRef.current) return
     const ctx = chartRef.current.getContext("2d")
+    if (!ctx) return
     const forecastData = data.map((d) => d.intensity.forecast)
     const indexData = data.map((d) => d.intensity.index)
     let bgColors = indexData.map((i) => getBgColor(i))
     console.log(bgColors)
 
-    function getBgColor(i) {
+    function getBgColor(i: string) {
       switch (i) {
         case "very low":
           return (i = "#93CC3A")
