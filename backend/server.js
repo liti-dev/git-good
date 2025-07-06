@@ -12,7 +12,7 @@ const port = 8080
 app.use(cors())
 app.use(bodyParser.json())
 
-// Store user email + location subscriptions
+// Store user email + location
 const users = []
 
 // Create email transporter
@@ -38,7 +38,6 @@ app.post("/user", (req, res) => {
   res.status(200).json({ success: true, message: "Subscribed successfully" })
 })
 
-// fetch carbon intensity for a location
 async function getRegionalCarbonIntensity(location) {
   console.log("Fetching carbon intensity")
   try {
@@ -46,27 +45,26 @@ async function getRegionalCarbonIntensity(location) {
     const url = `https://api.carbonintensity.org.uk/regional/intensity/${now}/fw24h/postcode/${location}`
     const response = await axios.get(url)
     console.log("Response received:", response.data.data.data[0].intensity.forecast)
-    return response.data.data.data[0].intensity.forecast // Extract intensity value
+    return response.data.data.data[0].intensity.forecast
   } catch (error) {
     console.error("Error fetching carbon intensity:", error)
     return null
   }
 }
 
-// check carbon intensity & send alerts
-async function checkCarbonAndTriggerWebhooks() {
+async function checkCarbonAndSendEmail() {
   console.log("Checking carbon intensity for users...")
   for (const { email, location } of users) {
     const carbonIntensity = await getRegionalCarbonIntensity(location)
 
     if (carbonIntensity && carbonIntensity < 110) {
-      sendEmailAlert(email, location, carbonIntensity)
+      sendReminderEmail(email, location, carbonIntensity)
     }
   }
 }
 
 // send email alert
-async function sendEmailAlert(email, location, intensity) {
+async function sendReminderEmail(email, location, intensity) {
   const message = {
     from: process.env.EMAIL_USER,
     to: email,
@@ -84,8 +82,8 @@ You can proceed with energy-intensive tasks. 🌍💚`,
   }
 }
 
-// Run check every 10 minute
-setInterval(checkCarbonAndTriggerWebhooks, 10 * 60 * 1000)
+// Run check every 30 minute
+setInterval(checkCarbonAndSendEmail, 30 * 60 * 1000)
 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`)

@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "8080:8080"
+    env_file:
+      - ./backend/.env
+    volumes:
+      - ./backend:/app
+    working_dir: /app
+    command: node server.js
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    working_dir: /app
+    command: npm run dev -- --host 0.0.0.0
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - backend
