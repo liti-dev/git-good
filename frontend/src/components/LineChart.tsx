@@ -61,7 +61,7 @@ const LineChart: React.FC<LineChartProps> = ({ data }) => {
             label: "Carbon Intensity (gCO2/kWh)",
             data: forecastData,
             backgroundColor: "#93CC3A",
-            borderColor: bgColors,
+            borderColor: "#93CC3A",
             pointBackgroundColor: bgColors,
             fill: true,
             tension: 0.1,

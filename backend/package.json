@@ -16,7 +16,9 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "lowdb": "^7.0.1",
     "nodemailer": "^6.10.0"
   },
-  "proxy": "https://api.websitecarbon.com"
+  "proxy": "https://api.websitecarbon.com",
+  "type": "module"
 }

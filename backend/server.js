@@ -1,9 +1,10 @@
-const express = require("express")
-const bodyParser = require("body-parser")
-const nodemailer = require("nodemailer")
-const cors = require("cors")
-const dotenv = require("dotenv")
-const axios = require("axios")
+import { JSONFilePreset } from "lowdb/node"
+import express from "express"
+import bodyParser from "body-parser"
+import nodemailer from "nodemailer"
+import cors from "cors"
+import dotenv from "dotenv"
+import axios from "axios"
 
 dotenv.config()
 const app = express()
@@ -13,7 +14,8 @@ app.use(cors())
 app.use(bodyParser.json())
 
 // Store user email + location
-const users = []
+const defaultData = { users: [] }
+const db = await JSONFilePreset("db.json", defaultData)
 
 // Create email transporter
 const transporter = nodemailer.createTransport({
@@ -26,15 +28,21 @@ const transporter = nodemailer.createTransport({
 })
 
 // Route to subscribe users with location + email
-app.post("/user", (req, res) => {
-  console.log("Received request at /user", req.body)
-
+app.post("/user", async (req, res) => {
+  await db.read()
   const { email, location } = req.body
   if (!email || !location) {
     return res.status(400).json({ error: "Email and location are required" })
   }
+  // Check if user already exists
+  const normailisedEmail = email.trim().toLowerCase()
+  const existingUser = db.data.users.find((user) => user.email === normailisedEmail)
+  if (existingUser) {
+    return res.status(400).json({ error: "User already subscribed" })
+  }
 
-  users.push({ email, location })
+  db.data.users.push({ email: normailisedEmail, location })
+  await db.write()
   res.status(200).json({ success: true, message: "Subscribed successfully" })
 })
 
@@ -54,7 +62,8 @@ async function getRegionalCarbonIntensity(location) {
 
 async function checkCarbonAndSendEmail() {
   console.log("Checking carbon intensity for users...")
-  for (const { email, location } of users) {
+  await db.read()
+  for (const { email, location } of db.data.users) {
     const carbonIntensity = await getRegionalCarbonIntensity(location)
 
     if (carbonIntensity && carbonIntensity < 110) {
