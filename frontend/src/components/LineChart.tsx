@@ -6,6 +6,7 @@ import "../index.css"
 
 interface LineChartProps {
   data: Array<{
+    from: string | null
     intensity: {
       forecast: number
       index: string
@@ -15,7 +16,7 @@ interface LineChartProps {
 
 const LineChart: React.FC<LineChartProps> = ({ data }) => {
   const chartRef = useRef<HTMLCanvasElement | null>(null)
-
+  // console.log("LineChart data:", data)
   useEffect(() => {
     if (!chartRef.current) return
     const ctx = chartRef.current.getContext("2d")
@@ -23,7 +24,14 @@ const LineChart: React.FC<LineChartProps> = ({ data }) => {
     const forecastData = data.map((d) => d.intensity.forecast)
     const indexData = data.map((d) => d.intensity.index)
     let bgColors = indexData.map((i) => getBgColor(i))
-    console.log(bgColors)
+    const timeLabels = data.map((d, i) => {
+      if (d.from) {
+        const date = new Date(d.from)
+        return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+      }
+      return i === 0 ? "Now" : `+${i}h`
+    })
+    // console.log(bgColors)
 
     function getBgColor(i: string) {
       switch (i) {
@@ -47,7 +55,7 @@ const LineChart: React.FC<LineChartProps> = ({ data }) => {
     const myChart = new Chart(ctx, {
       type: "line",
       data: {
-        labels: indexData,
+        labels: timeLabels,
         datasets: [
           {
             label: "Carbon Intensity (gCO2/kWh)",
