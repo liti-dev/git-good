@@ -31,5 +31,6 @@ export async function getIntensity(location: string) {
     return data.data
   } catch (error) {
     console.log("Error fetching carbon intensity", error)
+    throw new Error("Could not get carbon intensity for this postcode")
   }
 }

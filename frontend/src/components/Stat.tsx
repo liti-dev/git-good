@@ -15,7 +15,7 @@ export default function Stat({ stat }: StatProps) {
       </h2>
       <h2>
         {stat.data[0].intensity.index === "low" || stat.data[0].intensity.index === "very low"
-          ? " Push your code!"
+          ? " Commit and push code!"
           : " Now may be not the best time. We'll send you a reminder email."}
       </h2>
       <PieChart data={generationmix} />

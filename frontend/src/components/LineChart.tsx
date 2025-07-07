@@ -84,7 +84,11 @@ const LineChart: React.FC<LineChartProps> = ({ data }) => {
     }
   }, [data])
 
-  return <canvas ref={chartRef}></canvas>
+  return (
+    <div style={{ width: "100%" }}>
+      <canvas ref={chartRef}></canvas>
+    </div>
+  )
 }
 
 export default LineChart
